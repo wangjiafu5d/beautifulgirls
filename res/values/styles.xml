@@ -1,0 +1,32 @@
+<resources>
+	
+    
+    <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
+
+        <!-- 状态栏颜色 -->
+        <item name="colorPrimaryDark">@color/Indigo_colorPrimaryDark</item>
+       <!--  Toolbar颜色 -->
+        <item name="colorPrimary">@color/Indigo_colorPrimary</item>
+        <!-- 返回键样式 -->
+        <item name="drawerArrowStyle">@style/AppTheme.DrawerArrowToggle</item>
+    </style>
+
+    <style name="AppTheme.DrawerArrowToggle" parent="Base.Widget.AppCompat.DrawerArrowToggle">
+        <item name="color">@android:color/white</item>
+    </style>
+    
+    <!-- <style name="ExitDialog" parent="@android:style/Theme.Dialog">  
+        <item name="android:windowTitleStyle">@style/ExitDialogTitle</item>  
+    </style>  
+    
+    
+    <style name="ExitDialogTitle" parent="@android:style/TextAppearance.DialogWindowTitle">  
+        <item name="android:gravity">center_horizontal</item>  
+    </style> -->
+    
+    <style name="Theme.ToolBar.Base.Title" parent="@style/TextAppearance.Widget.AppCompat.Toolbar.Title">
+        <item name="android:textSize">18sp</item>
+        <item name="android:textColor">@android:color/white</item>
+    </style>
+
+</resources>
