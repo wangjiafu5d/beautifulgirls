@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.chuan.beautifulgirls.fragment.Fragment_flow;
 import com.chuan.beautifulgirls.fragment.Fragment_index;
 import com.chuan.beautifulgirls.fragment.Fragment_viewpager;
@@ -12,6 +11,7 @@ import com.chuan.beautifulgirls.utils.MyApplication;
 
 
 import android.graphics.Color;
+import android.opengl.Visibility;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -20,18 +20,19 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.Toast;
 import android.widget.AdapterView.OnItemClickListener;
 
 public class SecondActivity extends AppCompatActivity{
 	//声明相关变量
-	public Fragment fragment_index;
-	public Fragment fragment_flow;
-	public Fragment fragment_viewpager;
+	public Fragment_index fragment_index;
+	public Fragment_flow fragment_flow;
+	public Fragment_viewpager fragment_viewpager;
     private Toolbar toolbar;
     private DrawerLayout mDrawerLayout;
     private ActionBarDrawerToggle mDrawerToggle;
@@ -51,7 +52,7 @@ public class SecondActivity extends AppCompatActivity{
         
         manageFragment();
         
-       
+       MyApplication.addActivity(this);
        
     }
     
@@ -125,8 +126,10 @@ public class SecondActivity extends AppCompatActivity{
     	ft.commit();
     	
     }
-    public void showFragment(Fragment fragment){
+    public void showFragment(Fragment fragment,String srcUrl){
     	if (fragment!=null) {
+    		
+    	
     		FragmentManager parentFm = getSupportFragmentManager();
         	FragmentTransaction ft = parentFm.beginTransaction();        	
         	hideFragment(fragment_flow,ft);
@@ -134,16 +137,20 @@ public class SecondActivity extends AppCompatActivity{
         	hideFragment(fragment_viewpager,ft);
         	if(!fragment.isAdded()){
     			ft.add(R.id.fragment_view, fragment);
-    		}else {
+    		}else {    			
     			ft.show(fragment);
 			}        	
         	ft.commit();
+        	if(!TextUtils.isEmpty(srcUrl)){        		
+    			updateFragment(fragment, srcUrl);
+    		}
 		}
     }
     private void hideFragment(Fragment fragment,FragmentTransaction ft){
     	if(fragment.isVisible()){
     		ft.hide(fragment);
     	}
+    	
     }
     private void clearMemory(){
     	Glide.get(MyApplication.getContext()).clearMemory();
@@ -160,16 +167,28 @@ public class SecondActivity extends AppCompatActivity{
     }
     @Override
     public void onBackPressed() {
-		if (fragment_index.isVisible()) {
+		if (fragment_index.isVisible()) {			
 			MyApplication.showFinishDialog(this);
 		}
-		if (fragment_flow.isVisible()) {
-			showFragment(fragment_index);
+		if (fragment_flow.isVisible()) {			
+			showFragment(fragment_index,"");
 		}
-		if (fragment_viewpager.isVisible()) {
-			showFragment(fragment_flow);
+		if (fragment_viewpager.isVisible()) {			
+			showFragment(fragment_flow,"");
 		}
     }
-    
+    public void updateFragment(Fragment fragment,String srcUrl){
+    	toolbar.setVisibility(View.GONE);
+		if (fragment instanceof Fragment_index) {
+			toolbar.setVisibility(View.VISIBLE);
+		} else if (fragment instanceof Fragment_flow) {
+			Fragment_flow thisFrag = (Fragment_flow) fragment;
+			List<String> newUrls = MyApplication.getChildUrlList(srcUrl);
+			thisFrag.update(newUrls);
+	
+		} else if (fragment instanceof Fragment_viewpager) {
+			
+		}
+    }
     
 }

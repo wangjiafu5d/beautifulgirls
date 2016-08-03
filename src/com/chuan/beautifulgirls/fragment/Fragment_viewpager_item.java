@@ -51,7 +51,7 @@ public class Fragment_viewpager_item extends Fragment{
 			@Override
 			public void onClick(View v) {
 				SecondActivity activity = (SecondActivity) getActivity();
-				activity.showFragment(activity.fragment_flow);			
+				activity.showFragment(activity.fragment_flow,"");			
 			}
 		});
 		

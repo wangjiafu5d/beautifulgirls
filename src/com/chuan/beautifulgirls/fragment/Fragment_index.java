@@ -11,6 +11,7 @@ import com.chuan.beautifulgirls.utils.MyApplication;
 import com.chuan.beautifulgirls.utils.OnItemClickListener;
 
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v4.app.Fragment;
 
 import android.support.v7.widget.GridLayoutManager;
@@ -32,6 +33,7 @@ public class Fragment_index extends Fragment{
 		@Override
 		public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 			View view =inflater.inflate(R.layout.index_grid_layout, container, false);
+			urls = MyApplication.getUrlList();
 			initView(view);
 			return view;
 		}
@@ -51,7 +53,7 @@ public class Fragment_index extends Fragment{
 	        		
 	        		
 	        		super.onScrolled(recyclerView, dx, dy);
-	        		Log.d("111", ""+mLayoutManager.findLastVisibleItemPosition());
+//	        		Log.d("111", ""+mLayoutManager.findLastVisibleItemPosition());
 //	        		
 	        		if (mLayoutManager.findLastVisibleItemPosition()>=(urls.size()-1)&&
 	        				!recyclerView.canScrollVertically(1)) {
@@ -82,30 +84,24 @@ public class Fragment_index extends Fragment{
 				@Override
 				public void onItemClick(View view, int position) {
 					SecondActivity activity = (SecondActivity) getActivity();
-					activity.showFragment(activity.fragment_flow);
+					activity.showFragment(activity.fragment_flow,MyApplication.getUrlList().get(position));
 					Toast.makeText(MyApplication.getContext(), ""+position, Toast.LENGTH_SHORT).show();
 					
 				}
 			});
-	       
-	        urls.add("http://ww3.sinaimg.cn/mw1024/9505c694gw1em9oo62xn7j20pt0h6ac3.jpg");
-			urls.add("http://ww3.sinaimg.cn/mw1024/9505c694jw1ed73sr6je0j20mi0u0q5c.jpg");
-			urls.add("http://ww2.sinaimg.cn/mw1024/62283e37jw1f20sqjj4x8j20qo143wox.jpg");
-			urls.add("http://ww3.sinaimg.cn/mw1024/62283e37jw1f0s3x0sqdsj20lc0sggpw.jpg");
-			urls.add("http://ww3.sinaimg.cn/mw1024/62283e37jw1etxl0b9y56j20lc0sg78s.jpg");
-			urls.add("http://ww4.sinaimg.cn/mw1024/62283e37tw1eg9ik5pmy3j21kw2dcanh.jpg");
-			urls.add("http://ww3.sinaimg.cn/mw1024/62283e37tw1eg9ijz9jemj21kw11xdnv.jpg");
-			urls.add("http://ww1.sinaimg.cn/mw1024/62283e37tw1eg9ijp7tssj21kw2dch0h.jpg");
-			urls.add("http://ww1.sinaimg.cn/mw1024/62283e37tw1eg9ijp7tssj21kw2dch0h.jpg");
-			urls.add("http://ww1.sinaimg.cn/mw1024/62283e37tw1eg9ijp7tssj21kw2dch0h.jpg");
-			urls.add("http://ww1.sinaimg.cn/mw1024/62283e37tw1eg9ijp7tssj21kw2dch0h.jpg");
-			urls.add("http://ww3.sinaimg.cn/mw1024/62283e37jw1f0s3x0sqdsj20lc0sggpw.jpg");
-			urls.add("http://ww1.sinaimg.cn/mw1024/be447c45gw1f4p2zwhz43j21kw11xwnu.jpg");
-			urls.add("http://ww1.sinaimg.cn/mw1024/be447c45gw1f4p2zwhz43j21kw11xwnu.jpg");
-			urls.add("http://ww1.sinaimg.cn/mw1024/be447c45gw1f4p34n9rf1j21kw2dcarm.jpg");
-			urls.add("http://ww1.sinaimg.cn/mw1024/be447c45gw1f3ntze3ea6j20f00jzwgk.jpg");
-			for (int i = 0; i < 100; i++) {
-				urls.add("http://ww1.sinaimg.cn/mw1024/be447c45gw1f3ntze3ea6j20f00jzwgk.jpg");
+		}
+		public void update(List<String> newUrls){
+			urls.clear();
+			for (String string : newUrls) {
+				urls.add(string);
 			}
+			new Handler().post(new Runnable() {
+				@Override
+				public void run() {
+					mAdapter.notifyDataSetChanged();
+
+				}
+
+			});
 		}
 }

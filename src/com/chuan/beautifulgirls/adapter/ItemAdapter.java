@@ -29,7 +29,7 @@ import android.widget.FrameLayout;
 
 import android.widget.ImageView;
 
-import android.widget.TextView;
+
 
 
 public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ViewHolder> {

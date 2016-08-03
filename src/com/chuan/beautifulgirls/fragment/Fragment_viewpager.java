@@ -9,6 +9,7 @@ import com.chuan.beautifulgirls.adapter.MyViewPagerAdapter;
 
 import android.app.Activity;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
@@ -16,7 +17,7 @@ import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
+
 
 public class Fragment_viewpager extends Fragment{
 	private ViewPager mViewPager;
@@ -27,7 +28,7 @@ public class Fragment_viewpager extends Fragment{
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		View view =inflater.inflate(R.layout.viewpager_layout, container, false);
-		urls.add("http://ww3.sinaimg.cn/mw1024/9505c694gw1em9oo62xn7j20pt0h6ac3.jpg");
+		urls.add("http://img0.ph.126.net/60lEKDu668I2E1qyJzy7ug==/1051309038031507146.jpg");
 		urls.add("http://ww3.sinaimg.cn/mw1024/9505c694jw1ed73sr6je0j20mi0u0q5c.jpg");
 		urls.add("http://ww2.sinaimg.cn/mw1024/62283e37jw1f20sqjj4x8j20qo143wox.jpg");
 		urls.add("http://ww3.sinaimg.cn/mw1024/62283e37jw1f0s3x0sqdsj20lc0sggpw.jpg");
@@ -58,5 +59,20 @@ public class Fragment_viewpager extends Fragment{
 		
 		
 		return view;
+	}
+	
+	public void update(List<String> newUrls){
+		urls.clear();
+		for (String string : newUrls) {
+			urls.add(string);
+		}
+		new Handler().post(new Runnable() {
+			@Override
+			public void run() {
+				mAdapter.notifyDataSetChanged();
+
+			}
+
+		});
 	}
 }

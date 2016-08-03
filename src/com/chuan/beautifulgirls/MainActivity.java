@@ -1,9 +1,13 @@
 package com.chuan.beautifulgirls;
 
+import java.util.List;
+
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.chuan.beautifulgirls.utils.HttpCallbackListener;
+import com.chuan.beautifulgirls.utils.HttpUtil;
 import com.chuan.beautifulgirls.utils.MyApplication;
-
+import com.chuan.beautifulgirls.utils.PraseResponse;
 
 import android.app.AlarmManager;
 import android.app.PendingIntent;
@@ -23,10 +27,45 @@ public class MainActivity extends AppCompatActivity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		
+		if (MyApplication.containsActivity()) {
+			MyApplication.addActivity(this);
+			Intent i = new Intent("SecondActivity");
+			startActivity(i);
+			return ;
+		}
+		
 		getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
 				WindowManager.LayoutParams.FLAG_FULLSCREEN);
 		setContentView(R.layout.activity_main);
+		
+		updateUrl();		
+		initViews();		
+		startSecondActivity();		
+		MyApplication.addActivity(this);
+		
+	}
+	@Override
+	protected void onPause() {		
+		super.onPause();
+		finish();
+	}
+	@Override
+	public void onBackPressed() {
+		if (manager != null) {
+			manager.cancel(pi);
+		}
+		MyApplication.showFinishDialog(this);
+	}
 	
+	protected void onDestroy() {
+		if(manager!=null){	
+			manager.cancel(pi);
+			}
+		super.onDestroy();
+	}
+    
+	private void initViews(){
 		ImageView img = (ImageView) findViewById(R.id.home_img);
 		TextView skip = (TextView) findViewById(R.id.start_second_activity);
 		skip.setOnClickListener(new OnClickListener() {
@@ -38,32 +77,8 @@ public class MainActivity extends AppCompatActivity {
 				startActivity(i);
 			}
 		});
-		
-		startSecondActivity();
 		updateHomeImage(img);
-		MyApplication.addActivity(this);
-		
 	}
-	@Override
-	protected void onPause() {		
-		super.onPause();
-		finish();
-	}
-	@Override
-	public void onBackPressed() {	
-		manager.cancel(pi);
-		MyApplication.showFinishDialog(this);
-	}
-	@Override
-	protected void onStop() {		
-		super.onStop();
-		
-	};
-	protected void onDestroy() {
-		manager.cancel(pi);
-		super.onDestroy();
-	}
-    
 	public void startSecondActivity(){
 		
 		manager = (AlarmManager) getSystemService(ALARM_SERVICE);
@@ -87,7 +102,7 @@ public class MainActivity extends AppCompatActivity {
 		centerCrop().
 		into(view);
 		
-		String url2 = sp.getString("url2", "empty");
+		/*String url2 = sp.getString("url2", "empty");
 //		url2 = "http://ww1.sinaimg.cn/mw1024/60e95fd8jw1f3rq8k1pqsj20qo0zk45s.jpg";
 		if(!url2.equals("empty")){
 			
@@ -100,7 +115,43 @@ public class MainActivity extends AppCompatActivity {
 			SharedPreferences.Editor editor = sp.edit();
 			editor.putString("url1", url2);
 			editor.commit();
+		}*/
+	}
+	private void updateUrl(){
+		if(MyApplication.getUrlList().size()==0){
+			String address = getString(R.string.address);
+			HttpUtil.sendHttpRequest(address, new HttpCallbackListener() {
+				
+				@Override
+				public void onFinish(String response) {
+					PraseResponse.handleResponse(response);
+					loadPictureCache();
+				}
+				
+				@Override
+				public void onError(Exception e) {				
+				}
+			});
 		}
+	}
+	private void loadPictureCache(){
+		List<String> list = MyApplication.getUrlList();
+		int i = (int) (Math.random()*list.size()/1);
+		if (i>0) {
+			String url2 = list.get(i);
+			
+			Glide.with(this).load(url2).
+			asBitmap().
+			error(R.drawable.home).
+			skipMemoryCache(true).diskCacheStrategy(DiskCacheStrategy.RESULT).
+			centerCrop();
+			
+			SharedPreferences sp = getSharedPreferences("home_urls", MODE_PRIVATE);
+			SharedPreferences.Editor editor = sp.edit();
+			editor.putString("url1", url2);
+			editor.commit();
+		}
+		
 	}
 	
 }
