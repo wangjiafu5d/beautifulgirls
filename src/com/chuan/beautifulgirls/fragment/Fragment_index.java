@@ -16,24 +16,28 @@ import android.support.v4.app.Fragment;
 
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
-
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
+
 
 public class Fragment_index extends Fragment{
 	private RecyclerView mRecyclerView;
     public GridAdapter mAdapter;
     private GridLayoutManager  mLayoutManager;
+    public List<String> urls = new ArrayList<String>(); 
    
-    public List<String> urls = new ArrayList<String>();   
    
 		@Override
 		public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 			View view =inflater.inflate(R.layout.index_grid_layout, container, false);
-			urls = MyApplication.getUrlList();
+			if(MyApplication.urlUpdateFlag){
+				List<String> newUrls = MyApplication.getUrl_list1();
+				for (String string : newUrls) {
+					urls.add(string);
+				}				
+			}
+			
 			initView(view);
 			return view;
 		}
@@ -58,7 +62,7 @@ public class Fragment_index extends Fragment{
 	        		if (mLayoutManager.findLastVisibleItemPosition()>=(urls.size()-1)&&
 	        				!recyclerView.canScrollVertically(1)) {
 	        			
-	        			Toast.makeText(MyApplication.getContext(), "µ½µ×À²£¡", Toast.LENGTH_SHORT).show();	        			
+//	        			Toast.makeText(MyApplication.getContext(), "µ½µ×À²£¡", Toast.LENGTH_SHORT).show();	        			
 //	        			mAdapter.notifyDataSetChanged();
 					}
 	                
@@ -84,24 +88,27 @@ public class Fragment_index extends Fragment{
 				@Override
 				public void onItemClick(View view, int position) {
 					SecondActivity activity = (SecondActivity) getActivity();
-					activity.showFragment(activity.fragment_flow,MyApplication.getUrlList().get(position));
-					Toast.makeText(MyApplication.getContext(), ""+position, Toast.LENGTH_SHORT).show();
+					activity.showFragment("Fragment_flow",urls.get(position));
+//					Toast.makeText(MyApplication.getContext(), ""+position, Toast.LENGTH_SHORT).show();
 					
 				}
 			});
-		}
-		public void update(List<String> newUrls){
+	}
+
+	public void update(List<String> newUrls) {
+		if (newUrls != null) {		
 			urls.clear();
-			for (String string : newUrls) {
+			for (String string : newUrls) {				
 				urls.add(string);
 			}
 			new Handler().post(new Runnable() {
 				@Override
 				public void run() {
 					mAdapter.notifyDataSetChanged();
-
 				}
 
 			});
 		}
+	}
+		
 }

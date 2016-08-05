@@ -25,11 +25,19 @@ import android.widget.TextView;
 public class GridAdapter extends RecyclerView.Adapter<GridAdapter.ViewHolder>{
 	private Fragment fragment;
     public List<String> urls = new ArrayList<String>();
+    private List<String> names = new ArrayList<String>();
     private OnItemClickListener onItemClickListener;
     
     public GridAdapter(List<String> urls, Fragment fragment) {    
     	this.urls = urls;
         this.fragment = fragment;
+        names.add("古风");
+        names.add("汉服");
+        names.add("手绘游戏");
+        names.add("coser");
+        names.add("明星");
+        names.add("气质");
+        names.add("性感");
 	}
 
 	public void setOnItemClickListener(OnItemClickListener onItemClickListener){
@@ -55,7 +63,11 @@ public class GridAdapter extends RecyclerView.Adapter<GridAdapter.ViewHolder>{
 	@Override
 	public void onBindViewHolder(ViewHolder viewHolder, final int position) {
 		// 回调实现监听点击
-		viewHolder.textView.setText(""+position);
+		if (position<names.size()-1) {
+			viewHolder.textView.setText(names.get(position));
+		} else {
+			viewHolder.textView.setText(""+position);
+		}
 		if (onItemClickListener != null) {
 			viewHolder.imageView.setOnClickListener(new OnClickListener() {
 
@@ -77,7 +89,7 @@ public class GridAdapter extends RecyclerView.Adapter<GridAdapter.ViewHolder>{
 		
 		Glide.with(fragment).load(urls.get(position)).    	
     	asBitmap().
-    	skipMemoryCache(true).diskCacheStrategy(DiskCacheStrategy.RESULT). 
+    	skipMemoryCache(true).diskCacheStrategy(DiskCacheStrategy.ALL). 
     	placeholder(R.drawable.place).error(R.drawable.error).
     	override(BitmapImageViewTarget.SIZE_ORIGINAL, BitmapImageViewTarget.SIZE_ORIGINAL).
     	into(new DriverViewTarget(viewHolder.imageView));

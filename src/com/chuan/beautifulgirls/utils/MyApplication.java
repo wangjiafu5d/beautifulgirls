@@ -19,9 +19,11 @@ public class MyApplication extends Application{
 	
 	private static Context context;
 	private static List<Activity> activities = new ArrayList<Activity>();
-	private static List<String> url_list = new ArrayList<String>();
-	private static Map<String, List<String>> url_map = new HashMap<String, List<String>>();
-//	public static boolean urlUpdateFlag = false;
+	private static List<String> url_list1 = new ArrayList<String>();
+	private static Map<String, List<String>> url_map1 = new HashMap<String, List<String>>();
+	private static List<String> url_list2 = new ArrayList<String>();
+	private static Map<String, List<String>> url_map2 = new HashMap<String, List<String>>();
+	public static boolean urlUpdateFlag = false;
 	
 	@Override
 	public void onCreate() {
@@ -45,6 +47,11 @@ public class MyApplication extends Application{
 			
 			@Override
 			public void onClick(DialogInterface dialog, int which) {
+				url_list1.clear();
+				url_map1.clear();
+				url_list2.clear();
+				url_map2.clear();
+				urlUpdateFlag = false;
 				finishAll();
 			}
 		});
@@ -80,25 +87,35 @@ public class MyApplication extends Application{
 		
 		return false;
 	}
-	public static void addUrlList(String url){
-//		Log.d("url", url);
-		url_list.add(url);
-	}
 	
-	public static void addUrlMap(String url,List<String> list){
-		url_map.put(url, list);
+	
+	public static List<String> getUrl_list1() {
+		return url_list1;
 	}
-	public static List<String> getUrlList(){
-		return url_list;
+
+	public static List<String> getUrl_list2() {
+		return url_list2;
 	}
-	public static List<String> getChildUrlList(String url){		
-		return url_map.get(url);
+
+	public static Map<String, List<String>> getUrl_map2() {
+		return url_map2;
+	}
+
+	public static List<String> getFlowUrlList(String url){		
+		return url_map1.get(url);
+	}
+	public static List<String> getVPUrlList(String url){		
+		return url_map2.get(url);
+	}
+
+	public static Map<String, List<String>> getUrl_map1() {
+		return url_map1;
 	}
 
 //	public static boolean isUrlUpdateFlag() {
 //		return urlUpdateFlag;
 //	}
-//
+////
 //	public static void setUrlUpdateFlag(boolean urlUpdateFlag) {
 //		MyApplication.urlUpdateFlag = urlUpdateFlag;
 //	}

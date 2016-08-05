@@ -6,7 +6,6 @@ import java.util.List;
 import com.chuan.beautifulgirls.R;
 import com.chuan.beautifulgirls.SecondActivity;
 import com.chuan.beautifulgirls.adapter.ItemAdapter;
-import com.chuan.beautifulgirls.utils.MyApplication;
 import com.chuan.beautifulgirls.utils.OnItemClickListener;
 
 import android.os.Bundle;
@@ -20,7 +19,7 @@ import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
+
 
 public class Fragment_flow extends Fragment{
 	private RecyclerView mRecyclerView;
@@ -55,7 +54,7 @@ public class Fragment_flow extends Fragment{
 	        		super.onScrolled(recyclerView, dx, dy);
 //	        		
 	        		if (!recyclerView.canScrollVertically(1)) {
-	        			Toast.makeText(MyApplication.getContext(), "到底啦！", Toast.LENGTH_SHORT).show();	        			
+//	        			Toast.makeText(MyApplication.getContext(), "到底啦！", Toast.LENGTH_SHORT).show();	        			
 //	        			mAdapter.notifyDataSetChanged();
 					}
 	                
@@ -82,8 +81,8 @@ public class Fragment_flow extends Fragment{
 				@Override
 				public void onItemClick(View view, int position) {
 					SecondActivity activity = (SecondActivity) getActivity();
-					activity.showFragment(activity.fragment_viewpager,"");
-					Toast.makeText(MyApplication.getContext(), ""+position, Toast.LENGTH_SHORT).show();
+					activity.showFragment("Fragment_viewpager",urls.get(position));
+//					Toast.makeText(MyApplication.getContext(), ""+position, Toast.LENGTH_SHORT).show();
 					
 				}
 			});
@@ -101,7 +100,7 @@ public class Fragment_flow extends Fragment{
 	            @Override
 	            public void onRefresh() {
 //	                tv.setText("正在刷新");
-	            	int random = (int) ((Math.random()*3)/1);
+	            	int random = (int) ((Math.random()*urls.size())/1);
 	            	urls.set(0, mAdapter.urls.get(random));
 	            	
 	                new Handler().post(new Runnable() {
@@ -121,17 +120,19 @@ public class Fragment_flow extends Fragment{
 	    }
 
 	public void update(List<String> newUrls) {
-		urls.clear();
-		for (String string : newUrls) {
-			urls.add(string);
-		}
-		new Handler().post(new Runnable() {
-			@Override
-			public void run() {
-				mAdapter.notifyDataSetChanged();
-
+		if (newUrls != null) {
+			urls.clear();
+			for (String string : newUrls) {
+				urls.add(string);
 			}
+			new Handler().post(new Runnable() {
+				@Override
+				public void run() {
+					mAdapter.notifyDataSetChanged();
 
-		});
+				}
+
+			});
+		}
 	}
 }

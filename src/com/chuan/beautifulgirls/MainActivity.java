@@ -1,5 +1,6 @@
 package com.chuan.beautifulgirls;
 
+
 import java.util.List;
 
 import com.bumptech.glide.Glide;
@@ -44,6 +45,8 @@ public class MainActivity extends AppCompatActivity {
 		startSecondActivity();		
 		MyApplication.addActivity(this);
 		
+//		File dir = new File(Environment.getExternalStorageDirectory()+"/MyGirls/");
+//    	dir.mkdirs();
 	}
 	@Override
 	protected void onPause() {		
@@ -98,7 +101,7 @@ public class MainActivity extends AppCompatActivity {
 		Glide.with(this).load(url).
 		asBitmap().
 		error(R.drawable.home).
-		skipMemoryCache(true).diskCacheStrategy(DiskCacheStrategy.RESULT).
+		skipMemoryCache(true).diskCacheStrategy(DiskCacheStrategy.ALL).
 		centerCrop().
 		into(view);
 		
@@ -118,13 +121,25 @@ public class MainActivity extends AppCompatActivity {
 		}*/
 	}
 	private void updateUrl(){
-		if(MyApplication.getUrlList().size()==0){
-			String address = getString(R.string.address);
+		if(MyApplication.getUrl_list1().size()==0){
+			String address = getString(R.string.address1);
 			HttpUtil.sendHttpRequest(address, new HttpCallbackListener() {
 				
 				@Override
 				public void onFinish(String response) {
-					PraseResponse.handleResponse(response);
+					PraseResponse.handleResponse(response,MyApplication.getUrl_list1(),MyApplication.getUrl_map1());
+					
+				}
+				
+				@Override
+				public void onError(Exception e) {				
+				}
+			});
+			HttpUtil.sendHttpRequest(getString(R.string.address2), new HttpCallbackListener() {
+				
+				@Override
+				public void onFinish(String response) {
+					PraseResponse.handleResponse(response,MyApplication.getUrl_list2(),MyApplication.getUrl_map2());
 					loadPictureCache();
 				}
 				
@@ -135,15 +150,16 @@ public class MainActivity extends AppCompatActivity {
 		}
 	}
 	private void loadPictureCache(){
-		List<String> list = MyApplication.getUrlList();
+		List<String> list = MyApplication.getUrl_list2();
 		int i = (int) (Math.random()*list.size()/1);
-		if (i>0) {
-			String url2 = list.get(i);
-			
+		if (i>=0) {
+			List<String> allPicturesList = MyApplication.getUrl_map2().get(list.get(i));
+			int i2 = (int) (Math.random()*allPicturesList.size()/1);
+			String url2 = allPicturesList.get(i2);
 			Glide.with(this).load(url2).
 			asBitmap().
 			error(R.drawable.home).
-			skipMemoryCache(true).diskCacheStrategy(DiskCacheStrategy.RESULT).
+			skipMemoryCache(true).diskCacheStrategy(DiskCacheStrategy.ALL).
 			centerCrop();
 			
 			SharedPreferences sp = getSharedPreferences("home_urls", MODE_PRIVATE);

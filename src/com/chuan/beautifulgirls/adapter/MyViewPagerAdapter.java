@@ -10,10 +10,10 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 
 
-public class MyViewPagerAdapter extends FragmentPagerAdapter{
+public class MyViewPagerAdapter extends FragmentPagerAdapter{	
 	
+	public List<String> urls = new ArrayList<String>();
 	
-	List<String> urls = new ArrayList<String>();
 	
 	public MyViewPagerAdapter(FragmentManager fm,List<String> urls) {
 		super(fm);
@@ -35,5 +35,18 @@ public class MyViewPagerAdapter extends FragmentPagerAdapter{
 		
 		return urls.size();
 	}
-
+	
+//	@Override
+//	public void notifyDataSetChanged() {
+//		
+//		super.notifyDataSetChanged();
+//	}
+//	@Override
+//	public int getItemPosition(Object object) {
+////		if(count>0){
+////			count--;
+//			  return POSITION_NONE;
+////		}
+////		return super.getItemPosition(object);
+//	}
 }

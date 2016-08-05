@@ -11,8 +11,9 @@ import com.chuan.beautifulgirls.utils.MyApplication;
 
 
 import android.graphics.Color;
-import android.opengl.Visibility;
+
 import android.os.Bundle;
+
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
@@ -20,8 +21,6 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.text.TextUtils;
-import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
@@ -39,8 +38,8 @@ public class SecondActivity extends AppCompatActivity{
     private ListView LeftMenu;
     private List<String> items = new ArrayList<String>();
     private com.chuan.beautifulgirls.adapter.DrawerLayoutAdapter mAdapter;
-   
-  
+    private String flow_keyUrl;
+    private int i=0;
     
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,7 +52,7 @@ public class SecondActivity extends AppCompatActivity{
         manageFragment();
         
        MyApplication.addActivity(this);
-       
+       checkUpdate();
     }
     
     private void initViews(){
@@ -81,7 +80,8 @@ public class SecondActivity extends AppCompatActivity{
          //设置菜单列表
          items.add("清理缓存");
          items.add("清理内存");
-         items.add("保存图片");
+         items.add("刷新页面");
+         items.add("退出程序");
          
          mAdapter = new com.chuan.beautifulgirls.adapter.DrawerLayoutAdapter(this, items);      
          LeftMenu.setAdapter(mAdapter);
@@ -94,10 +94,25 @@ public class SecondActivity extends AppCompatActivity{
 				case 0:
 					clearDiskMemory();					
 					break;
-				case 1:
+				case 1:									
 					clearMemory();
 					break;
+				case 2:					
+					if (fragment_index.isVisible()) {
+						List<String> newUrls = MyApplication.getUrl_list1();						
+						if (newUrls != null&&newUrls.size()>0) {							
+							fragment_index.update(newUrls);
+						}
+					}
+					if (fragment_flow.isVisible()) {
+						fragment_flow.update(MyApplication.getFlowUrlList(flow_keyUrl));
+					}
+					break;
+				case 3:
+					MyApplication.finishAll();
+					break;
 				}
+ 					
  				
  			}
  		});
@@ -115,7 +130,7 @@ public class SecondActivity extends AppCompatActivity{
     	FragmentTransaction ft = parentFm.beginTransaction();
     	fragment_flow = new Fragment_flow(); 
     	fragment_index = new Fragment_index();
-    	fragment_viewpager = new Fragment_viewpager();
+//    	fragment_viewpager = new Fragment_viewpager();
     	
     
 //    	ft.add(0, fragment_flow);
@@ -126,25 +141,47 @@ public class SecondActivity extends AppCompatActivity{
     	ft.commit();
     	
     }
-    public void showFragment(Fragment fragment,String srcUrl){
-    	if (fragment!=null) {
-    		
+    public void showFragment(String fragment,String srcUrl){
+//    	toolbar.setVisibility(View.GONE);
     	
-    		FragmentManager parentFm = getSupportFragmentManager();
-        	FragmentTransaction ft = parentFm.beginTransaction();        	
-        	hideFragment(fragment_flow,ft);
-        	hideFragment(fragment_index,ft);
-        	hideFragment(fragment_viewpager,ft);
-        	if(!fragment.isAdded()){
-    			ft.add(R.id.fragment_view, fragment);
+    	FragmentManager parentFm = getSupportFragmentManager();
+    	FragmentTransaction ft = parentFm.beginTransaction();
+    	
+    	if(fragment_viewpager!=null&&fragment_viewpager.isAdded()){
+    		ft.remove(fragment_viewpager);
+    	}
+    	
+    	if (fragment.equals("Fragment_index")) {
+    		hideFragment(fragment_flow,ft);
+    		ft.show(fragment_index);
+//    		toolbar.setVisibility(View.VISIBLE);
+    		
+		}else if (fragment.equals("Fragment_flow")){
+			hideFragment(fragment_index,ft);
+			if(!fragment_flow.isAdded()){
+    			ft.add(R.id.fragment_view, fragment_flow);
     		}else {    			
-    			ft.show(fragment);
-			}        	
-        	ft.commit();
-        	if(!TextUtils.isEmpty(srcUrl)){        		
-    			updateFragment(fragment, srcUrl);
-    		}
+    			ft.show(fragment_flow);
+			} 
+			flow_keyUrl = srcUrl;
+		}else if (fragment.equals("Fragment_viewpager")){
+			hideFragment(fragment_flow,ft);
+			fragment_viewpager = new Fragment_viewpager();
+			fragment_viewpager.setUrls(MyApplication.getUrl_map2().get(srcUrl));
+			ft.add(R.id.fragment_view, fragment_viewpager);
 		}
+    	       	
+        ft.commit();
+        
+        	if (fragment.equals("Fragment_flow")) {
+    			List<String> newUrls = MyApplication.getFlowUrlList(srcUrl);
+    			if (newUrls!=null&&newUrls.size()>0) {
+    				fragment_flow.update(newUrls);
+    			}
+			} 
+			
+				
+		
     }
     private void hideFragment(Fragment fragment,FragmentTransaction ft){
     	if(fragment.isVisible()){
@@ -167,28 +204,75 @@ public class SecondActivity extends AppCompatActivity{
     }
     @Override
     public void onBackPressed() {
-		if (fragment_index.isVisible()) {			
+		if (fragment_index!=null&&fragment_index.isVisible()) {			
 			MyApplication.showFinishDialog(this);
 		}
-		if (fragment_flow.isVisible()) {			
-			showFragment(fragment_index,"");
+		if (fragment_flow!=null&&fragment_flow.isVisible()) {			
+			showFragment("Fragment_index","");
 		}
-		if (fragment_viewpager.isVisible()) {			
-			showFragment(fragment_flow,"");
+		if (fragment_viewpager!=null&&fragment_viewpager.isVisible()) {			
+			showFragment("Fragment_flow","");
 		}
     }
-    public void updateFragment(Fragment fragment,String srcUrl){
-    	toolbar.setVisibility(View.GONE);
-		if (fragment instanceof Fragment_index) {
-			toolbar.setVisibility(View.VISIBLE);
-		} else if (fragment instanceof Fragment_flow) {
-			Fragment_flow thisFrag = (Fragment_flow) fragment;
-			List<String> newUrls = MyApplication.getChildUrlList(srcUrl);
-			thisFrag.update(newUrls);
-	
-		} else if (fragment instanceof Fragment_viewpager) {
+//    public void updateFragment(Fragment fragment,String srcUrl){
+//    	
+//		if (fragment instanceof Fragment_index) {
+//			
+//		} else if (fragment instanceof Fragment_flow) {
+//			Fragment_flow thisFrag = (Fragment_flow) fragment;
+//			List<String> newUrls = MyApplication.getFlowUrlList(srcUrl);
+//			if (newUrls!=null&&newUrls.size()>0) {
+//				thisFrag.update(newUrls);
+//			}
+//			
+////			toolbar.setVisibility(View.GONE);
+//		} else if (fragment instanceof Fragment_viewpager) {
+////			Fragment_viewpager thisFrag = (Fragment_viewpager) fragment;
+////			List<String> newUrls = MyApplication.getVPUrlList(srcUrl);
+////			thisFrag.update(newUrls);
+//		}
+//    }
+    public void checkUpdate(){
+    	new Thread(new Runnable() {
 			
-		}
+			@Override
+			public void run() {
+				
+				while (!MyApplication.urlUpdateFlag&&i<18) {						
+					try {
+						Thread.sleep(333);
+					} catch (InterruptedException e) {							
+						e.printStackTrace();
+					}
+//					Log.d("iii", "while");
+					if(MyApplication.urlUpdateFlag){
+//						Log.d("iii", "send");
+						runOnUiThread(new Runnable() {
+							
+							@Override
+							public void run() {
+								List<String> newUrls = MyApplication.getUrl_list1();
+								fragment_index.update(newUrls);	
+								Toast.makeText(MyApplication.getContext(), getString(R.string.hint), Toast.LENGTH_LONG).show();
+							}
+						});
+						break;
+					}
+					i++;
+				}
+				
+//				Log.d("iii", ""+i);
+				if (i==18) {
+					runOnUiThread(new Runnable() {
+						
+						@Override
+						public void run() {
+							Toast.makeText(MyApplication.getContext(), getString(R.string.warning), Toast.LENGTH_LONG).show();							
+						}
+					});				
+				}
+			
+			}
+		}).start();
     }
-    
 }

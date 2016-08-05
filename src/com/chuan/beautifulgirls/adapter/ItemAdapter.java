@@ -90,7 +90,7 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ViewHolder> {
     		//glide加载图片，并且做适屏处理。
     		Glide.with(fragment).load(urls.get(position)).    	
         	asBitmap().fitCenter().
-        	skipMemoryCache(true).diskCacheStrategy(DiskCacheStrategy.RESULT).
+        	skipMemoryCache(true).diskCacheStrategy(DiskCacheStrategy.ALL).
         	override(BitmapImageViewTarget.SIZE_ORIGINAL, BitmapImageViewTarget.SIZE_ORIGINAL).
         	placeholder(R.drawable.place).error(R.drawable.error).
         	into(new DriverViewTarget(viewHolder.imageView));
@@ -108,7 +108,7 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ViewHolder> {
 			
 			Glide.with(fragment).load(urls.get(position)).    	
         	asBitmap().fitCenter().
-        	skipMemoryCache(true).diskCacheStrategy(DiskCacheStrategy.RESULT).
+        	skipMemoryCache(true).diskCacheStrategy(DiskCacheStrategy.ALL).
         	override(sizeModel.getWidth(),sizeModel.getHeight()).
         	into(viewHolder.imageView);
 		}

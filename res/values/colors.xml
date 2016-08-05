@@ -6,4 +6,5 @@
     <color name="Indigo_nav_color">#4675FF</color>
     <color name="my_gray">#50000000</color>
     <color name="my_white">#ffffff</color>
+    <color name="my_black">#000000</color>
 </resources>
