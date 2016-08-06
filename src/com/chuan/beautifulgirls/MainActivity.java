@@ -35,7 +35,7 @@ public class MainActivity extends AppCompatActivity {
 			startActivity(i);
 			return ;
 		}
-		
+//		Log.d("sss", "start");
 		getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
 				WindowManager.LayoutParams.FLAG_FULLSCREEN);
 		setContentView(R.layout.activity_main);
@@ -95,6 +95,7 @@ public class MainActivity extends AppCompatActivity {
 		
 		SharedPreferences sp = getSharedPreferences("home_urls", MODE_PRIVATE);
 		String url = sp.getString("url1", "empty");
+//		Log.d("sss", url);
 		if(url.equals("empty")){
 			url = String.valueOf(R.drawable.home);
 		}
@@ -135,11 +136,14 @@ public class MainActivity extends AppCompatActivity {
 				public void onError(Exception e) {				
 				}
 			});
+//			Log.d("sss", getString(R.string.address2));
 			HttpUtil.sendHttpRequest(getString(R.string.address2), new HttpCallbackListener() {
 				
 				@Override
 				public void onFinish(String response) {
+//					Log.d("sss", response);
 					PraseResponse.handleResponse(response,MyApplication.getUrl_list2(),MyApplication.getUrl_map2());
+//					Log.d("sss", "loadPictureCache2");
 					loadPictureCache();
 				}
 				
@@ -150,6 +154,7 @@ public class MainActivity extends AppCompatActivity {
 		}
 	}
 	private void loadPictureCache(){
+//		Log.d("sss", "loadPictureCache3");
 		List<String> list = MyApplication.getUrl_list2();
 		int i = (int) (Math.random()*list.size()/1);
 		if (i>=0) {
@@ -161,7 +166,7 @@ public class MainActivity extends AppCompatActivity {
 			error(R.drawable.home).
 			skipMemoryCache(true).diskCacheStrategy(DiskCacheStrategy.ALL).
 			centerCrop();
-			
+//			Log.d("sss", url2);			
 			SharedPreferences sp = getSharedPreferences("home_urls", MODE_PRIVATE);
 			SharedPreferences.Editor editor = sp.edit();
 			editor.putString("url1", url2);

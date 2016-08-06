@@ -128,6 +128,7 @@ public class Fragment_flow extends Fragment{
 			new Handler().post(new Runnable() {
 				@Override
 				public void run() {
+					mRecyclerView.scrollToPosition(0);
 					mAdapter.notifyDataSetChanged();
 
 				}

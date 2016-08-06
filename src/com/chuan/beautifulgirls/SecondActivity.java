@@ -56,7 +56,7 @@ public class SecondActivity extends AppCompatActivity{
     }
     
     private void initViews(){
-    	 toolbar.setTitle("Toolbar");//设置Toolbar标题
+    	 toolbar.setTitle("美女图片");//设置Toolbar标题
          toolbar.setTitleTextColor(Color.parseColor("#ffffff")); //设置标题颜色
          toolbar.setTitleTextAppearance(this, R.style.Theme_ToolBar_Base_Title);
          setSupportActionBar(toolbar);
@@ -175,7 +175,7 @@ public class SecondActivity extends AppCompatActivity{
         
         	if (fragment.equals("Fragment_flow")) {
     			List<String> newUrls = MyApplication.getFlowUrlList(srcUrl);
-    			if (newUrls!=null&&newUrls.size()>0) {
+    			if (newUrls!=null&&newUrls.size()>0) {    				
     				fragment_flow.update(newUrls);
     			}
 			} 
