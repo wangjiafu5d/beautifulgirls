@@ -63,7 +63,7 @@ public class GridAdapter extends RecyclerView.Adapter<GridAdapter.ViewHolder>{
 	@Override
 	public void onBindViewHolder(ViewHolder viewHolder, final int position) {
 		// 回调实现监听点击
-		if (position<names.size()-1) {
+		if (position<names.size()) {
 			viewHolder.textView.setText(names.get(position));
 		} else {
 			viewHolder.textView.setText(""+position);
