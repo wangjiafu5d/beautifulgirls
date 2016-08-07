@@ -20,7 +20,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 
-public class Fragment_viewpager extends Fragment {
+public class FragmentViewFager extends Fragment {
 	private ViewPager mViewPager;
 	private MyViewPagerAdapter mAdapter;
 	private List<String> urls = new ArrayList<String>();

@@ -1,10 +1,6 @@
 package com.chuan.beautifulgirls.adapter;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import com.chuan.beautifulgirls.R;
-
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,25 +9,25 @@ import android.widget.BaseAdapter;
 import android.widget.TextView;
 
 public class DrawerLayoutAdapter extends BaseAdapter{
-	private List<String> items = new ArrayList<String>();
+	private String[] menu;
 	private LayoutInflater inflater;
 	
 	
-	public DrawerLayoutAdapter(Context context,List<String> items) {
-		this.items = items;
+	public DrawerLayoutAdapter(Context context,String[] menu) {
+		this.menu = menu;
 		this.inflater = LayoutInflater.from(context);
 	}
 
 	@Override
 	public int getCount() {
 		
-		return items.size();
+		return menu.length;
 	}
 
 	@Override
 	public String getItem(int position) {
 		
-		return items.get(position);
+		return menu[position];
 	}
 
 	@Override
@@ -55,7 +51,7 @@ public class DrawerLayoutAdapter extends BaseAdapter{
 			holder = (ViewHolder) convertView.getTag();
 		}
 		
-		holder.item.setText(items.get(position));
+		holder.item.setText(menu[position]);
 		
 		return convertView;
 	}

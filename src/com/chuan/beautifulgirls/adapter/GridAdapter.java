@@ -25,19 +25,13 @@ import android.widget.TextView;
 public class GridAdapter extends RecyclerView.Adapter<GridAdapter.ViewHolder>{
 	private Fragment fragment;
     public List<String> urls = new ArrayList<String>();
-    private List<String> names = new ArrayList<String>();
+    private String[] names;
     private OnItemClickListener onItemClickListener;
     
-    public GridAdapter(List<String> urls, Fragment fragment) {    
+    public GridAdapter(List<String> urls, Fragment fragment,String[] index) {    
     	this.urls = urls;
         this.fragment = fragment;
-        names.add("古风");
-        names.add("汉服");
-        names.add("手绘游戏");
-        names.add("coser");
-        names.add("明星");
-        names.add("气质");
-        names.add("性感");
+        this.names = index;       
 	}
 
 	public void setOnItemClickListener(OnItemClickListener onItemClickListener){
@@ -63,8 +57,8 @@ public class GridAdapter extends RecyclerView.Adapter<GridAdapter.ViewHolder>{
 	@Override
 	public void onBindViewHolder(ViewHolder viewHolder, final int position) {
 		// 回调实现监听点击
-		if (position<names.size()) {
-			viewHolder.textView.setText(names.get(position));
+		if (position<names.length) {
+			viewHolder.textView.setText(names[position]);
 		} else {
 			viewHolder.textView.setText(""+position);
 		}

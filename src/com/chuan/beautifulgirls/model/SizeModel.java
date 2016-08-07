@@ -1,5 +1,7 @@
 package com.chuan.beautifulgirls.model;
 
+
+//保存每个item的应该显示的尺寸和图片地址，方便回收创建时复用。
 public class SizeModel {
 
     private String url;

@@ -21,7 +21,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 
-public class Fragment_flow extends Fragment{
+public class FragmentFlow extends Fragment{
 	private RecyclerView mRecyclerView;
     public ItemAdapter mAdapter;
     private StaggeredGridLayoutManager  mLayoutManager;
@@ -43,14 +43,10 @@ public class Fragment_flow extends Fragment{
 	            spanCount, 
 	            StaggeredGridLayoutManager.VERTICAL);
 	        mLayoutManager.setGapStrategy(StaggeredGridLayoutManager.GAP_HANDLING_NONE);
-//	        mRecyclerView.setHasFixedSize(true);
 	        mRecyclerView.setLayoutManager(mLayoutManager);
 	        mRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
 	        	@Override
 	        	public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
-	        		
-	        		
-	        		
 	        		super.onScrolled(recyclerView, dx, dy);
 //	        		
 	        		if (!recyclerView.canScrollVertically(1)) {
@@ -62,16 +58,14 @@ public class Fragment_flow extends Fragment{
 	        	@Override
 	        	public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
 //	        		if(newState==RecyclerView.SCROLL_STATE_IDLE)
-//	        		mLayoutManager.invalidateSpanAssignments();
-	        		
+//	        		mLayoutManager.invalidateSpanAssignments();	        		
 	        		super.onScrollStateChanged(recyclerView, newState);
 	        	}
 			});
 
 
 	        mAdapter = new ItemAdapter(urls,this);
-	        mRecyclerView.setAdapter(mAdapter);
-	        
+	        mRecyclerView.setAdapter(mAdapter);	        
 	        mAdapter.setOnItemClickListener(new OnItemClickListener() {
 				
 				@Override
@@ -81,13 +75,9 @@ public class Fragment_flow extends Fragment{
 				@Override
 				public void onItemClick(View view, int position) {
 					SecondActivity activity = (SecondActivity) getActivity();
-					activity.showFragment("Fragment_viewpager",urls.get(position));
-//					Toast.makeText(MyApplication.getContext(), ""+position, Toast.LENGTH_SHORT).show();
-					
+					activity.showFragment("FragmentViewPager",urls.get(position));
 				}
 			});
-	       
-	        
 //	        tv = (TextView)findViewById(R.id.textView1);
 	        swipeRefreshLayout = (SwipeRefreshLayout)view.findViewById(R.id.swipe_container);
 	        //设置刷新时动画的颜色，可以设置4个

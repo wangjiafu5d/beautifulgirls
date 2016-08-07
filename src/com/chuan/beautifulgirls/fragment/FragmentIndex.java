@@ -21,13 +21,12 @@ import android.view.View;
 import android.view.ViewGroup;
 
 
-public class Fragment_index extends Fragment{
+public class FragmentIndex extends Fragment{
 	private RecyclerView mRecyclerView;
     public GridAdapter mAdapter;
+    private String[] index;
     private GridLayoutManager  mLayoutManager;
     public List<String> urls = new ArrayList<String>(); 
-   
-   
 		@Override
 		public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 			View view =inflater.inflate(R.layout.index_grid_layout, container, false);
@@ -52,16 +51,12 @@ public class Fragment_index extends Fragment{
 	        mRecyclerView.setLayoutManager(mLayoutManager);
 	        mRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
 	        	@Override
-	        	public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
-	        		
-	        		
-	        		
+	        	public void onScrolled(RecyclerView recyclerView, int dx, int dy) { 	        		
 	        		super.onScrolled(recyclerView, dx, dy);
-//	        		Log.d("111", ""+mLayoutManager.findLastVisibleItemPosition());
-//	        		
+
+	        		//¼àÌý»¬µ½µ×
 	        		if (mLayoutManager.findLastVisibleItemPosition()>=(urls.size()-1)&&
-	        				!recyclerView.canScrollVertically(1)) {
-	        			
+	        				!recyclerView.canScrollVertically(1)) {	        			
 //	        			Toast.makeText(MyApplication.getContext(), "µ½µ×À²£¡", Toast.LENGTH_SHORT).show();	        			
 //	        			mAdapter.notifyDataSetChanged();
 					}
@@ -70,14 +65,12 @@ public class Fragment_index extends Fragment{
 	        	@Override
 	        	public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
 //	        		if(newState==RecyclerView.SCROLL_STATE_IDLE)
-//	        		mLayoutManager.invalidateSpanAssignments();
-	        		
+//	        		mLayoutManager.invalidateSpanAssignments();	        		
 	        		super.onScrollStateChanged(recyclerView, newState);
 	        	}
 			});
-
-
-	        mAdapter = new GridAdapter(urls,this);
+	        index = getResources().getStringArray(R.array.index);
+	        mAdapter = new GridAdapter(urls,this,index);
 	        mRecyclerView.setAdapter(mAdapter);	        
 	        mAdapter.setOnItemClickListener(new OnItemClickListener() {
 				
@@ -88,9 +81,7 @@ public class Fragment_index extends Fragment{
 				@Override
 				public void onItemClick(View view, int position) {
 					SecondActivity activity = (SecondActivity) getActivity();
-					activity.showFragment("Fragment_flow",urls.get(position));
-//					Toast.makeText(MyApplication.getContext(), ""+position, Toast.LENGTH_SHORT).show();
-					
+					activity.showFragment("FragmentFlow",urls.get(position));
 				}
 			});
 	}

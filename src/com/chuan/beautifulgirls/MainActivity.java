@@ -35,7 +35,7 @@ public class MainActivity extends AppCompatActivity {
 			startActivity(i);
 			return ;
 		}
-//		Log.d("sss", "start");
+		//设置全屏显示
 		getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
 				WindowManager.LayoutParams.FLAG_FULLSCREEN);
 		setContentView(R.layout.activity_main);
@@ -44,9 +44,6 @@ public class MainActivity extends AppCompatActivity {
 		initViews();		
 		startSecondActivity();		
 		MyApplication.addActivity(this);
-		
-//		File dir = new File(Environment.getExternalStorageDirectory()+"/MyGirls/");
-//    	dir.mkdirs();
 	}
 	@Override
 	protected void onPause() {		
@@ -67,7 +64,7 @@ public class MainActivity extends AppCompatActivity {
 			}
 		super.onDestroy();
 	}
-    
+    //初始化控件，加入跳过当前页面，启动活动2的监听
 	private void initViews(){
 		ImageView img = (ImageView) findViewById(R.id.home_img);
 		TextView skip = (TextView) findViewById(R.id.start_second_activity);
@@ -82,8 +79,8 @@ public class MainActivity extends AppCompatActivity {
 		});
 		updateHomeImage(img);
 	}
-	public void startSecondActivity(){
-		
+	//延时启动活动2
+	public void startSecondActivity(){		
 		manager = (AlarmManager) getSystemService(ALARM_SERVICE);
 		long triggerAtTime = System.currentTimeMillis() + 2000;
 		Intent i = new Intent("SecondActivity");
@@ -91,11 +88,11 @@ public class MainActivity extends AppCompatActivity {
 		manager.set(AlarmManager.RTC, triggerAtTime, pi);
 	}
 	
+	//获取载入图片，并显示
 	private void updateHomeImage(ImageView view){
 		
 		SharedPreferences sp = getSharedPreferences("home_urls", MODE_PRIVATE);
 		String url = sp.getString("url1", "empty");
-//		Log.d("sss", url);
 		if(url.equals("empty")){
 			url = String.valueOf(R.drawable.home);
 		}
@@ -106,21 +103,8 @@ public class MainActivity extends AppCompatActivity {
 		centerCrop().
 		into(view);
 		
-		/*String url2 = sp.getString("url2", "empty");
-//		url2 = "http://ww1.sinaimg.cn/mw1024/60e95fd8jw1f3rq8k1pqsj20qo0zk45s.jpg";
-		if(!url2.equals("empty")){
-			
-			Glide.with(this).load(url2).
-			asBitmap().
-			error(R.drawable.home).
-			skipMemoryCache(true).diskCacheStrategy(DiskCacheStrategy.RESULT).
-			centerCrop();			
-
-			SharedPreferences.Editor editor = sp.edit();
-			editor.putString("url1", url2);
-			editor.commit();
-		}*/
 	}
+	//访问网络获取图片分类URL地址和所有图片地址URL，保存至Application的成员静态变量
 	private void updateUrl(){
 		if(MyApplication.getUrl_list1().size()==0){
 			String address = getString(R.string.address1);
@@ -136,14 +120,12 @@ public class MainActivity extends AppCompatActivity {
 				public void onError(Exception e) {				
 				}
 			});
-//			Log.d("sss", getString(R.string.address2));
+
 			HttpUtil.sendHttpRequest(getString(R.string.address2), new HttpCallbackListener() {
 				
 				@Override
 				public void onFinish(String response) {
-//					Log.d("sss", response);
 					PraseResponse.handleResponse(response,MyApplication.getUrl_list2(),MyApplication.getUrl_map2());
-//					Log.d("sss", "loadPictureCache2");
 					loadPictureCache();
 				}
 				
@@ -153,8 +135,9 @@ public class MainActivity extends AppCompatActivity {
 			});
 		}
 	}
+	//预加载载入画面的图片，下次登录时显示
 	private void loadPictureCache(){
-//		Log.d("sss", "loadPictureCache3");
+		//从图片分类列表中随机选取图片类型，再在详细列表中随机选取一张图片缓存图片和保存地址到sharedPreference
 		List<String> list = MyApplication.getUrl_list2();
 		int i = (int) (Math.random()*list.size()/1);
 		if (i>=0) {
@@ -165,8 +148,7 @@ public class MainActivity extends AppCompatActivity {
 			asBitmap().
 			error(R.drawable.home).
 			skipMemoryCache(true).diskCacheStrategy(DiskCacheStrategy.ALL).
-			centerCrop();
-//			Log.d("sss", url2);			
+			centerCrop();		
 			SharedPreferences sp = getSharedPreferences("home_urls", MODE_PRIVATE);
 			SharedPreferences.Editor editor = sp.edit();
 			editor.putString("url1", url2);

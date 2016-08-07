@@ -112,11 +112,4 @@ public class MyApplication extends Application{
 		return url_map1;
 	}
 
-//	public static boolean isUrlUpdateFlag() {
-//		return urlUpdateFlag;
-//	}
-////
-//	public static void setUrlUpdateFlag(boolean urlUpdateFlag) {
-//		MyApplication.urlUpdateFlag = urlUpdateFlag;
-//	}
 }

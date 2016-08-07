@@ -25,10 +25,10 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-public class Fragment_viewpager_item extends Fragment{
+public class FragmentViewPagerItem extends Fragment{
 	private String url;
 	private String number;
-	public Fragment_viewpager_item(String url,String number) {
+	public FragmentViewPagerItem(String url,String number) {
 		this.url = url;
 		this.number = number;
 	}
@@ -62,15 +62,11 @@ public class Fragment_viewpager_item extends Fragment{
 	                		dir.mkdir();
 	                	}
 	                	File file = new File(Environment.getExternalStorageDirectory()+"/MyGirls/",
-	                			url.substring(url.lastIndexOf("/")+1,url.length()));
-	                	
-//	                	Log.d("sss", file.toString());
-//	                	Log.d("sss",""+ resource.getRowBytes() * resource.getHeight());
+	                			url.substring(url.lastIndexOf("/")+1,url.length()));	                	
+
 	    				try {
 	    					FileOutputStream fo = new FileOutputStream(file);			
 	    					resource.compress(Bitmap.CompressFormat.JPEG, 100, fo);
-//	    					String s = "11";
-//	    					fo.write(s.getBytes());
 	    					fo.flush();
 	    					fo.close();
 	    				} catch (FileNotFoundException e) {
@@ -89,7 +85,7 @@ public class Fragment_viewpager_item extends Fragment{
 			@Override
 			public void onClick(View v) {
 				SecondActivity activity = (SecondActivity) getActivity();
-				activity.showFragment("Fragment_flow","");			
+				activity.showFragment("FragmentFlow","");			
 			}
 		});
 		

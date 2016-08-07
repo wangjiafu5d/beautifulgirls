@@ -3,7 +3,7 @@ package com.chuan.beautifulgirls.adapter;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.chuan.beautifulgirls.fragment.Fragment_viewpager_item;
+import com.chuan.beautifulgirls.fragment.FragmentViewPagerItem;
 
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -24,7 +24,7 @@ public class MyViewPagerAdapter extends FragmentPagerAdapter{
 	public Fragment getItem(int arg0) {
 		String number = new String("/");
 		number =  (arg0+1) + number +urls.size();
-		Fragment fragment = new Fragment_viewpager_item(urls.get(arg0),number);
+		Fragment fragment = new FragmentViewPagerItem(urls.get(arg0),number);
 		
 		
 		return fragment;

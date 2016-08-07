@@ -12,16 +12,13 @@ import android.text.TextUtils;
 public class HttpUtil {
 	public static void sendHttpRequest(final String address,final HttpCallbackListener listener){
 		if (!TextUtils.isEmpty(address)) {
-//			Log.d("TAG2", "sendHttp");
-//			Log.d("TAG2", address.toString());
 			new Thread(new Runnable() {
 
 				@Override
 				public void run() {
 					HttpURLConnection conn = null;
 					BufferedReader reader = null;
-					try {						
-//						Log.d("TAG", "try");
+					try {
 						URL url = new URL(address);
 						conn = (HttpURLConnection) url.openConnection();
 						conn.setRequestMethod("GET");
@@ -35,11 +32,7 @@ public class HttpUtil {
 							response.append(line);
 							
 						}
-//						Log.d("TAG3.1", ""+response.toString().length());
 						if (listener != null) {
-//							String temp = response.toString();
-//							Log.d("TAG3.3", temp.substring(temp.length()-10, temp.length()));
-//							Log.d("TAG3",temp );
 							listener.onFinish(response.toString());
 							
 						}

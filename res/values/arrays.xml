@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="menu">
+        <item >清理缓存</item>
+        <item >清理内存</item>
+        <item >刷新页面</item>
+        <item >退出程序</item>
+    </string-array>
+    <string-array name="index">
+        <item >古风</item>
+        <item >汉服</item>
+        <item >手绘游戏</item>
+        <item >coser</item>
+        <item >明星</item>
+        <item >气质</item>
+        <item >性感</item>
+    </string-array>
+</resources>

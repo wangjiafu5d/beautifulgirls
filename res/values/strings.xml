@@ -13,4 +13,6 @@
 	<string name="address2">http://1366826530.blog.163.com/blog/static/14002886520167474042264/</string>
 	<string name="warning">未能获取到图片地址，请检查网络</string>
 	<string name="hint">获取图片地址成功</string>
+	<string name="title">美女图片</string>
+	<string name="finish">已完成</string>
 </resources>
